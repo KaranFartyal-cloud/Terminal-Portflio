@@ -15,6 +15,36 @@ const map = {
   email: "You can contact me through my email.",
 };
 
+const linkMap = {
+  youtube: "youtube.com/@KaranFartyal-p2u",
+  instagram: "instagram.com/karanfartyal",
+  linkedin: "linkedin.com/in/karanfartyal/",
+  X: "x.com/KaranFarty79979",
+  github: "github.com/KaranFartyal-cloud",
+};
+
+const imgMap = {
+  youtube: "./public/youtube.png",
+  instagram: "./public/instagram.png",
+  linkedin: "./public/linkedin.png",
+  X: "./public/twitter.png",
+  github: "./public/github.png",
+};
+
+const textTypingEffect = (element, text, i = 0) => {
+  if (i === 0) {
+    element.textContent = "";
+  }
+
+  element.textContent += text[i];
+
+  if (i === text.length - 1) return;
+
+  setTimeout(() => {
+    textTypingEffect(element, text, i + 1);
+  }, 10);
+};
+
 const removeOneLetter = () => {
   let fullValue = inputDiv.textContent;
 
@@ -65,9 +95,15 @@ const whatCommand = () => {
 
   if (command === "help") {
     insertHelpCommand();
+
+    return;
+  } else if (command === "social") {
+    insertSocialCommand();
+
     return;
   } else {
     notFoundCommand();
+
     return;
   }
 };
@@ -85,7 +121,7 @@ const addUpTerminal = () => {
   outerDiv.classList.add("flex");
 
   const userTag = document.createElement("p");
-  userTag.textContent = "Visiter@kash.com:~$";
+
   userTag.classList.add("text-[#498869]");
 
   inputDiv = document.createElement("div");
@@ -100,6 +136,8 @@ const addUpTerminal = () => {
   outerDiv.appendChild(inputDiv);
   outerDiv.appendChild(blinker);
 
+  textTypingEffect(userTag, "Visiter@kash.com:~$");
+
   inputEnabled = true;
 };
 
@@ -107,7 +145,7 @@ const insertHelpCommand = () => {
   clearUpTerminal();
 
   const outerDiv = document.createElement("div");
-  outerDiv.classList += "grid grid-cols-2 p-3 md:w-1/2 my-2"; //for every command i shall write p-3 and all
+  outerDiv.classList += "grid grid-cols-2 p-3 md:w-3/4 "; //for every command i shall write p-3 and all
 
   const commands = document.createElement("div");
   commands.classList += "text-[#73ABAD]";
@@ -116,23 +154,31 @@ const insertHelpCommand = () => {
   whatCommandsDoes.classList += "text-[#B89076]";
   const entries = Object.entries(map);
 
-  for (let i = 0; i < entries.length; i++) {
-    const command = document.createElement("h1");
-    const ansCommand = document.createElement("h1");
-
-    command.textContent = entries[i][0];
-    ansCommand.textContent = entries[i][1];
-
-    commands.appendChild(command);
-    whatCommandsDoes.appendChild(ansCommand);
-  }
-
   outerDiv.appendChild(commands);
   outerDiv.appendChild(whatCommandsDoes);
 
   mainScreen.append(outerDiv);
 
-  addUpTerminal();
+  for (let i = 0; i < entries.length; i++) {
+    const command = document.createElement("h1");
+
+    commands.appendChild(command);
+
+    console.log(entries[i][0]);
+
+    textTypingEffect(command, entries[i][0]);
+
+    setTimeout(() => {
+      const ansCommand = document.createElement("h1");
+
+      whatCommandsDoes.appendChild(ansCommand);
+      textTypingEffect(ansCommand, entries[i][1]);
+    }, 30);
+  }
+
+  setTimeout(() => {
+    addUpTerminal();
+  }, 200);
 };
 
 const notFoundCommand = () => {
@@ -143,12 +189,63 @@ const notFoundCommand = () => {
   div.classList.add("p-3");
 
   const h1 = document.createElement("h1");
-  h1.textContent = `Sorry, I Can't find the command you are looking for !😕😕`;
+
   h1.classList.add("text-[#B89076]");
 
   div.appendChild(h1);
 
   mainScreen.append(div);
+
+  textTypingEffect(
+    h1,
+    `Sorry, I Can't find the command you are looking for !😕😕`
+  );
+  setTimeout(() => {
+    addUpTerminal();
+  }, 200);
+};
+
+const insertSocialCommand = () => {
+  clearUpTerminal();
+
+  const gridDiv = document.createElement("div");
+  gridDiv.classList.add("grid", "grid-cols-2", "p-3", "md:w-3/4");
+
+  const firstDiv = document.createElement("div");
+  firstDiv.classList.add("flex", "flex-col", "text-[#B89076]");
+
+  const secondDiv = document.createElement("div");
+  secondDiv.classList.add("flex", "flex-col", "text-[#d7baffc3]");
+
+  gridDiv.appendChild(firstDiv);
+  gridDiv.appendChild(secondDiv);
+
+  const linkEntries = Object.entries(linkMap);
+  const imgEntries = Object.entries(imgMap);
+
+  for (let i = 0; i < linkEntries.length; i++) {
+    const outerDiv = document.createElement("div");
+    const img = document.createElement("img");
+    const a = document.createElement("a");
+    const a2 = document.createElement("a");
+
+    outerDiv.classList.add("flex", "gap-3", "items-center");
+    outerDiv.appendChild(img);
+    outerDiv.appendChild(a);
+
+    img.src = imgEntries[i][1];
+    img.classList.add("h-5");
+
+    textTypingEffect(a, linkEntries[i][0])
+    textTypingEffect(a2,linkEntries[i][1] )
+    // a2.textContent = linkEntries[i][1];
+    // a.textContent = linkEntries[i][0];
+
+    firstDiv.appendChild(outerDiv);
+    secondDiv.appendChild(a2);
+  }
+
+  mainScreen.appendChild(gridDiv);
 
   addUpTerminal();
 };
